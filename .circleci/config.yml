@@ -23,7 +23,7 @@ jobs:
           at: /tmp/workspace
       - checkout
       - run: echo $OWNER_NAME
-      - run: cat output.txt
+      - run: cat /tmp/workspace/output.txt
 # Orchestrate or schedule a set of jobs
 workflows:
   # Name the workflow "welcome"
