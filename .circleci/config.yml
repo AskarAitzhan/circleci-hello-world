@@ -10,6 +10,7 @@ jobs:
       - image: circleci/node
     steps:
       - run: echo "Hello world" > output.txt
+      - run: mkdir -p /tmp/workspace
       - persist_to_workspace:
           root: /tmp/workspace
           paths:
@@ -22,7 +23,7 @@ jobs:
           at: /tmp/workspace
       - checkout
       - run: echo $OWNER_NAME
-      - run: cat /tmp/workspace/output.txt
+      - run: cat output.txt
 # Orchestrate or schedule a set of jobs
 workflows:
   # Name the workflow "welcome"
