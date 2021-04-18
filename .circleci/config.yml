@@ -14,6 +14,7 @@ jobs:
     docker:
       - image: circleci/node
     steps:
+      - checkout
       - run: echo $OWNER_NAME
 # Orchestrate or schedule a set of jobs
 workflows:
@@ -21,7 +22,6 @@ workflows:
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - checkout
       - welcome/run
       - print_hello
       - print_world:
