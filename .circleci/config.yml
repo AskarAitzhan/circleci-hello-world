@@ -1,3 +1,8 @@
+defaults: &defaults
+  docker:
+    - image: circleci/node
+  working_directory: ~/
+
 # Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 commands:
@@ -10,9 +15,16 @@ orbs:
   # Declare a dependency on the welcome-orb
   welcome: circleci/welcome-orb@0.4.1
 jobs:
+  test_failure:
+    <<: *defaults
+    steps:
+      - run: return 1
+      - run:
+          name: Print Failure Message
+          command: echo "Hello Failure"
+          when: on_fail
   save_hello_world_output:
-    docker:
-      - image: circleci/node
+    <<: *defaults
     steps:
       - run: echo "Hello world" > ~/output.txt
       - persist_to_workspace:
@@ -20,8 +32,7 @@ jobs:
           paths:
             - output.txt
   print_output_file:
-    docker:
-      - image: circleci/node
+    <<: *defaults
     steps:
       - attach_workspace:
           at: ~/
@@ -40,3 +51,4 @@ workflows:
       - print_output_file:
           requires:
             - save_hello_world_output
+      - test_failure
