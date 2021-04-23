@@ -1,0 +1,25 @@
+---
+- name: "update apt packages"
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: "upgrade packages"
+  become: yes
+  apt:
+    upgrade: yes
+
+- name: "install node"
+  become: yes
+  apt:
+    name: nodejs
+
+- name: "Copy index file"
+  become: yes
+  copy:
+    src: index.js
+    dest: /tmp
+
+- name: "Run node app"
+  become: yes
+  shell: nodejs /tmp/index.js

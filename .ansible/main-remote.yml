@@ -1,0 +1,6 @@
+---
+- name: "Ansible Playbook for setting up a remote host"
+  hosts: all
+  user: ubuntu
+  roles:
+    - setup
