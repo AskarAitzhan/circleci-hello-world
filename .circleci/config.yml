@@ -15,14 +15,18 @@ orbs:
   # Declare a dependency on the welcome-orb
   welcome: circleci/welcome-orb@0.4.1
 jobs:
-  test_failure:
-    <<: *defaults
+  create_infrastructure:
+    docker:
+      - image: circleci/aws-cli
+    working_directory: ~/circleci-hello-world
     steps:
-      - run: return 1
+      - checkout
       - run:
-          name: Print Failure Message
-          command: echo "Hello Failure"
-          when: on_fail
+          name: Create AWS Infrastructure
+          command: >
+            aws cloudformation create-stack
+            --stack-name "TestCircleCI"
+            --template-body cloudformation/template.yml
   save_hello_world_output:
     <<: *defaults
     steps:
@@ -46,9 +50,4 @@ workflows:
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - welcome/run
-      - save_hello_world_output
-      - print_output_file:
-          requires:
-            - save_hello_world_output
-      - test_failure
+      - create_infrastructure
