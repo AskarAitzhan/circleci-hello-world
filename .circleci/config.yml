@@ -26,7 +26,7 @@ jobs:
           command: >
             aws cloudformation create-stack
             --stack-name "TestCircleCI"
-            --template-body cloudformation/template.yml
+            --template-body circleci-hello-world/cloudformation/template.yml
   save_hello_world_output:
     <<: *defaults
     steps:
