@@ -30,10 +30,13 @@ jobs:
             --region $AWS_DEFAULT_REGION
   configure_infrastructure:
     docker:
-      - image: ansible/ansible
+      - image: python:3.7-alpine3.11
     working_directory: ~/circleci-hello-world
     steps:
       - checkout
+      - run:
+          name: Install Ansible
+          command: sudo -H pip install ansible
       - add_ssh_keys:
           fingerprints:
             - "a9:34:93:69:43:66:13:1a:b1:ea:82:9d:92:37:58:bf"
