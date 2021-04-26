@@ -44,10 +44,10 @@ jobs:
           command: >
             echo "[all]" > ~/inventory.txt &&
             aws ec2 describe-instances
-            --query 'Reservations[*].Instances[*].PublicIpAddress'
+            --query 'Reservations[*].Instances[*].PublicDnsName'
             --output text >> ~/inventory.txt
       - run:
-          name: Install tar
+          name: Install tar and gzip
           command: yum install -y tar && yum install -y gzip
       - persist_to_workspace:
           root: ~/
