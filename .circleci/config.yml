@@ -63,7 +63,7 @@ jobs:
             - "a9:34:93:69:43:66:13:1a:b1:ea:82:9d:92:37:58:bf"
       - run:
           name: Run ansible playbook
-          command: ansible-playbook -i .ansible/inventory.txt .ansible/main-remote.yml
+          command: ansible-playbook -i ~/inventory.txt .ansible/main-remote.yml
   save_hello_world_output:
     <<: *defaults
     steps:
