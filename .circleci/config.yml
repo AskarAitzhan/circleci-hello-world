@@ -34,6 +34,12 @@ jobs:
     working_directory: ~/circleci-hello-world
     steps:
       - run:
+          command: |
+            while [[ ! $(aws cloudformation describe-stacks --query "Stacks[0].StackStatus" --output text | grep "CREATE_COMPLETE") > /dev/null ]]
+            do
+            sleep 5
+            done
+      - run:
           name: Create inventory file
           command: >
             echo "[all]" > ~/inventory.txt &&
