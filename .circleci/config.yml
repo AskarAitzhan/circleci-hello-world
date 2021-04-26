@@ -33,19 +33,18 @@ jobs:
       - image: amazon/aws-cli
     working_directory: ~/circleci-hello-world
     steps:
-      - run: mkdir -p /tmp/$CIRCLE_WORKFLOW_ID
       - run:
           name: Create inventory file
           command: >
-            echo "[all]" > /tmp/$CIRCLE_WORKFLOW_ID/inventory.txt &&
+            echo "[all]" > ~/inventory.txt &&
             aws ec2 describe-instances
             --query 'Reservations[*].Instances[*].PublicIpAddress'
-            --output text >> /tmp/$CIRCLE_WORKFLOW_ID/inventory.txt
+            --output text >> ~/inventory.txt
       - run:
           name: Install tar
           command: yum install -y tar && yum install -y gzip
       - persist_to_workspace:
-          root: /tmp/$CIRCLE_WORKFLOW_ID/
+          root: ~/
           paths:
             - inventory.txt
   configure_infrastructure:
@@ -54,7 +53,8 @@ jobs:
     working_directory: ~/circleci-hello-world
     steps:
       - attach_workspace:
-          at: /tmp/$CIRCLE_WORKFLOW_ID/
+          at: ~/
+      - run: cat ~/inventory.txt
       - checkout
       - run:
           name: Install Ansible
@@ -64,7 +64,7 @@ jobs:
             - "a9:34:93:69:43:66:13:1a:b1:ea:82:9d:92:37:58:bf"
       - run:
           name: Run ansible playbook
-          command: ansible-playbook -i /tmp/$CIRCLE_WORKFLOW_ID/inventory.txt .ansible/main-remote.yml
+          command: ansible-playbook -i ~/inventory.txt .ansible/main-remote.yml
   save_hello_world_output:
     <<: *defaults
     steps:
