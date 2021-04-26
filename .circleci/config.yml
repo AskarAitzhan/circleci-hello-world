@@ -36,7 +36,7 @@ jobs:
       - checkout
       - run:
           name: Install Ansible
-          command: pip install ansible
+          command: apk add ansible
       - add_ssh_keys:
           fingerprints:
             - "a9:34:93:69:43:66:13:1a:b1:ea:82:9d:92:37:58:bf"
