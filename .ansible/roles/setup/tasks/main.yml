@@ -24,17 +24,19 @@
 - name: "install pm2"
   become: yes
   npm:
-    name: ["pm2"]
+    name: pm2
     global: yes
     production: yes
     state: present
 
 - name: "Create directory"
+  become: yes
   file:
     path: ~/web
     state: directory
 
 - name: "Copy index file"
+  become: yes
   copy:
     src: index.js
     dest: ~/web/index.js
