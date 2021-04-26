@@ -30,10 +30,7 @@ jobs:
             --region $AWS_DEFAULT_REGION
   configure_infrastructure:
     docker:
-      - image: ansible/ansible:default
-        auth:
-          username: $DOCKERHUB_USER
-          password: $DOCKERHUB_PASSWORD
+      - image: python:3.7-alpine3.11
     working_directory: ~/circleci-hello-world
     steps:
       - checkout
