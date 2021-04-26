@@ -42,7 +42,7 @@ jobs:
             --output text >> inventory.txt
       - run:
           name: Install tar
-          command: yum install -y tar
+          command: yum install -y tar && yum install -y gzip
       - persist_to_workspace:
           root: ~/circleci-hello-world
           paths:
