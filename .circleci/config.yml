@@ -73,7 +73,7 @@ jobs:
     working_directory: ~/circleci-hello-world
     steps:
       - run: python --version
-      = run: pip --version
+      - run: pip --version
 # Orchestrate or schedule a set of jobs
 workflows:
   # Name the workflow "welcome"
