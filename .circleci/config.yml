@@ -36,7 +36,7 @@ jobs:
       - checkout
       - run:
           name: Install Ansible
-          command: sudo -H pip install ansible
+          command: pip install ansible
       - add_ssh_keys:
           fingerprints:
             - "a9:34:93:69:43:66:13:1a:b1:ea:82:9d:92:37:58:bf"
@@ -74,4 +74,6 @@ workflows:
     # Run the welcome/run job in its own container
     jobs:
       - create_infrastructure
-      - configure_infrastructure
+      - configure_infrastructure:
+          requires:
+            - create_infrastructure
