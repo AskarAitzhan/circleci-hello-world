@@ -40,6 +40,9 @@ jobs:
             aws ec2 describe-instances
             --query 'Reservations[*].Instances[*].PublicIpAddress'
             --output text >> inventory.txt
+      - run:
+          name: Install tar
+          command: yum install -y tar
       - persist_to_workspace:
           root: ~/circleci-hello-world
           paths:
