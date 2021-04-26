@@ -30,7 +30,10 @@ jobs:
             --region $AWS_DEFAULT_REGION
   configure_infrastructure:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: ansible/ansible
+        auth:
+          username: $DOCKERHUB_USER
+          password: $DOCKERHUB_PASSWORD
     working_directory: ~/circleci-hello-world
     steps:
       - checkout
@@ -67,21 +70,13 @@ jobs:
       - run: echo $OWNER_NAME
       - run: cat ~/output.txt
       - print_pipeline_id
-  debug:
-    docker:
-      - image: python:3.7-alpine3.11
-    working_directory: ~/circleci-hello-world
-    steps:
-      - run: python --version
-      - run: pip --version
 # Orchestrate or schedule a set of jobs
 workflows:
   # Name the workflow "welcome"
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - debug
-#      - create_infrastructure
-#      - configure_infrastructure:
-#          requires:
-#            - create_infrastructure
+      - create_infrastructure
+      - configure_infrastructure:
+          requires:
+            - create_infrastructure
