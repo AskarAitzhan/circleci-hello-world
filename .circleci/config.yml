@@ -36,15 +36,15 @@ jobs:
       - run:
           name: Create inventory file
           command: >
-            echo "[all]" > inventory.txt &&
+            echo "[all]" > ~/inventory.txt &&
             aws ec2 describe-instances
             --query 'Reservations[*].Instances[*].PublicIpAddress'
-            --output text >> inventory.txt
+            --output text >> ~/inventory.txt
       - run:
           name: Install tar
           command: yum install -y tar && yum install -y gzip
       - persist_to_workspace:
-          root: ~/circleci-hello-world
+          root: ~/
           paths:
             - inventory.txt
   configure_infrastructure:
@@ -53,7 +53,7 @@ jobs:
     working_directory: ~/circleci-hello-world
     steps:
       - attach_workspace:
-          at: ~/circleci-hello-world
+          at: ~/
       - checkout
       - run:
           name: Install Ansible
