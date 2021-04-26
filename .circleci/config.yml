@@ -28,11 +28,29 @@ jobs:
             --stack-name "TestCircleCI"
             --template-body file://cloudformation/template.yml
             --region $AWS_DEFAULT_REGION
-  configure_infrastructure:
+  generate_inventory_file:
     docker:
       - image: amazon/aws-cli
     working_directory: ~/circleci-hello-world
     steps:
+      - run:
+          name: Create inventory file
+          command: >
+            echo "[all]" > inventory.txt &&
+            aws ec2 describe-instances
+              --query 'Reservations[*].Instances[*].PublicIpAddress'
+              --output text >> inventory.txt
+      - persist_to_workspace:
+          root: ~/circleci-hello-world
+          paths:
+            - inventory.txt
+  configure_infrastructure:
+    docker:
+      - image: python:3.7-alpine3.11
+    working_directory: ~/circleci-hello-world
+    steps:
+      - attach_workspace:
+          at: ~/circleci-hello-world
       - checkout
       - run:
           name: Install Ansible
@@ -40,13 +58,6 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "a9:34:93:69:43:66:13:1a:b1:ea:82:9d:92:37:58:bf"
-      - run:
-          name: Create inventory file
-          command: >
-            echo "[all]" > .ansible/inventory.txt &&
-            aws ec2 describe-instances
-              --query 'Reservations[*].Instances[*].PublicIpAddress'
-              --output text >> .ansible/inventory.txt
       - run:
           name: Run ansible playbook
           command: ansible-playbook -i .ansible/inventory.txt .ansible/main-remote.yml
@@ -74,6 +85,9 @@ workflows:
     # Run the welcome/run job in its own container
     jobs:
       - create_infrastructure
+      - generate_inventory_file:
+          requires:
+              - create_infrastructure
       - configure_infrastructure:
           requires:
-            - create_infrastructure
+            - generate_inventory_file
