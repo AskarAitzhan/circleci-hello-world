@@ -71,23 +71,6 @@ jobs:
       - run:
           name: Run ansible playbook
           command: ansible-playbook -i ~/inventory.txt .ansible/main-remote.yml
-  save_hello_world_output:
-    <<: *defaults
-    steps:
-      - run: echo "Hello world" > ~/output.txt
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - output.txt
-  print_output_file:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: ~/
-      - checkout
-      - run: echo $OWNER_NAME
-      - run: cat ~/output.txt
-      - print_pipeline_id
 # Orchestrate or schedule a set of jobs
 workflows:
   # Name the workflow "welcome"
