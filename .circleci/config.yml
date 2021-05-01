@@ -70,7 +70,7 @@ jobs:
           command: ansible-playbook -i ~/inventory.txt .ansible/main-remote.yml
   smoke_test:
     docker:
-      - image: alpine:latest
+      - image: amazon/aws-cli
     working_directory: ~/circleci-hello-world
     steps:
       - run:
