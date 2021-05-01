@@ -71,6 +71,20 @@ jobs:
       - run:
           name: Run ansible playbook
           command: ansible-playbook -i ~/inventory.txt .ansible/main-remote.yml
+  smoke_test:
+    docker:
+      - image: alpine:latest
+    working_directory: ~/circleci-hello-world
+    steps:
+      - run:
+          name: "Test availability"
+          command: |
+            if curl -s --head "https://google.com"
+            then
+              echo "It worked!"
+            else
+              echo "It failed"
+            fi
 # Orchestrate or schedule a set of jobs
 workflows:
   # Name the workflow "welcome"
@@ -84,3 +98,6 @@ workflows:
       - configure_infrastructure:
           requires:
             - generate_inventory_file
+      - smoke_test:
+          requires:
+            - configure_infrastructure
