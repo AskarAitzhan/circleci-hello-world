@@ -76,7 +76,7 @@ jobs:
       - run:
           name: "Test availability"
           command: |
-            if curl -s --head "https://google.com"
+            if curl -s --head $(aws cloudformation describe-stacks --stack-name TestCircleCI --query "Stacks[0].Outputs[0].OutputValue")
             then
               echo "It worked!"
             else

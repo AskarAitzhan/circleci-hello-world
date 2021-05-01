@@ -24,4 +24,4 @@ Outputs:
   InstanceUrl:
     Description: "Instance Public DNS Name"
     Value:
-      Fn::Join: ['', ["http://", Fn::GetAtt: ["Ec2Instance", "PublicDnsName"]]]
+      Fn::Join: ['', ["http://", Fn::GetAtt: ["Ec2Instance", "PublicDnsName"], ":3000"]]
