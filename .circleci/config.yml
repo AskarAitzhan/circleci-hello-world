@@ -87,7 +87,7 @@ jobs:
           command: |
             if curl -s --head $(aws cloudformation describe-stacks --stack-name prod-${CIRCLE_WORKFLOW_ID} --query "Stacks[0].Outputs[0].OutputValue"  --output text)
             then
-              return 1
+              return 0
             else
               return 1
             fi
