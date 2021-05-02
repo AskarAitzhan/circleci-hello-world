@@ -16,6 +16,7 @@ commands:
           name: Destroy environment
           command: |
             aws cloudformation delete-stack --stack-name prod-${CIRCLE_WORKFLOW_ID}
+          when: on_fail
       - run:
           command: |
             aws cloudformation wait stack-delete-complete --stack-name prod-${CIRCLE_WORKFLOW_ID}
@@ -86,7 +87,6 @@ jobs:
               return 1
             fi
       - destroy_environment
-        when: on_fail
 # Orchestrate or schedule a set of jobs
 workflows:
   # Name the workflow "welcome"
