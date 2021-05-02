@@ -25,17 +25,17 @@ jobs:
           name: Create AWS Infrastructure
           command: >
             aws cloudformation create-stack
-            --stack-name "TestCircleCI"
+            --stack-name prod-${CIRCLE_WORKFLOW_ID}
             --template-body file://cloudformation/template.yml
             --region $AWS_DEFAULT_REGION
+      - run:
+          command: |
+            aws cloudformation wait stack-create-complete --stack-name prod-${CIRCLE_WORKFLOW_ID}
   generate_inventory_file:
     docker:
       - image: amazon/aws-cli
     working_directory: ~/circleci-hello-world
     steps:
-      - run:
-          command: |
-            aws cloudformation wait stack-create-complete --stack-name TestCircleCI
       - run:
           name: Create inventory file
           command: >
@@ -76,7 +76,7 @@ jobs:
       - run:
           name: "Test availability"
           command: |
-            if curl -s --head $(aws cloudformation describe-stacks --stack-name TestCircleCI --query "Stacks[0].Outputs[0].OutputValue"  --output text)
+            if curl -s --head $(aws cloudformation describe-stacks --stack-name prod-${CIRCLE_WORKFLOW_ID} --query "Stacks[0].Outputs[0].OutputValue"  --output text)
             then
               echo "It worked!"
             else
