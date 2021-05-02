@@ -16,6 +16,9 @@ commands:
           name: Destroy environment
           command: |
             aws cloudformation delete-stack --stack-name prod-${CIRCLE_WORKFLOW_ID}
+      - run:
+          command: |
+            aws cloudformation wait stack-delete-complete --stack-name prod-${CIRCLE_WORKFLOW_ID}
 # Use a package of configuration called an orb.
 orbs:
   # Declare a dependency on the welcome-orb
