@@ -82,9 +82,9 @@ jobs:
           command: |
             if curl -s --head $(aws cloudformation describe-stacks --stack-name prod-${CIRCLE_WORKFLOW_ID} --query "Stacks[0].Outputs[0].OutputValue"  --output text)
             then
-              return 0
+              exit 0
             else
-              return 1
+              exit 1
             fi
       - destroy_environment
 # Orchestrate or schedule a set of jobs
@@ -93,7 +93,11 @@ workflows:
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - create_infrastructure
+      - create_infrastructure:
+          filters:
+            branches:
+              only:
+                - main
       - generate_inventory_file:
           requires:
               - create_infrastructure
